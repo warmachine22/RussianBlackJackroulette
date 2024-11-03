@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +24,7 @@
             margin-bottom: 30px;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centering the barrel */
+            align-items: center;
         }
         .result {
             font-size: 24px;
@@ -37,7 +36,7 @@
             color: green;
         }
         .barrel {
-            display: none; /* Hiding the barrel initially */
+            display: none;
             margin-top: 20px;
             width: 150px;
             height: 150px;
@@ -61,15 +60,19 @@
             background-color: red;
         }
         .slot-0 { top: 10px; left: 65px; }
-        .slot-1 { top: 35px; left: 115px; }
-        .slot-2 { top: 85px; left: 130px; }
-        .slot-3 { top: 125px; left: 95px; }
-        .slot-4 { top: 125px; left: 20px; }
-        .slot-5 { top: 35px; left: 0; }
+        .slot-1 { top: 25px; left: 95px; }
+        .slot-2 { top: 55px; left: 120px; }
+        .slot-3 { top: 90px; left: 130px; }
+        .slot-4 { top: 125px; left: 115px; }
+        .slot-5 { top: 140px; left: 75px; }
+        .slot-6 { top: 125px; left: 35px; }
+        .slot-7 { top: 90px; left: 10px; }
+        .slot-8 { top: 55px; left: 0px; }
+        .slot-9 { top: 25px; left: 35px; }
         .button-container {
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Adding more spacing between buttons */
+            gap: 15px;
             width: 100%;
             max-width: 300px;
         }
@@ -91,7 +94,6 @@
 </head>
 <body>
     <h1 class="title">Blackjack Roulette</h1>
-<!--     <h1 class="title">Companion App</h1> -->
     <div class="visuals-container">
         <p>Spin the cylinder and pull the trigger. Will you survive?</p>
         <div class="result" id="result"></div>
@@ -104,6 +106,10 @@
                 <div class="chamber-slot slot-3"></div>
                 <div class="chamber-slot slot-4"></div>
                 <div class="chamber-slot slot-5"></div>
+                <div class="chamber-slot slot-6"></div>
+                <div class="chamber-slot slot-7"></div>
+                <div class="chamber-slot slot-8"></div>
+                <div class="chamber-slot slot-9"></div>
             </div>
         </div>
     </div>
@@ -123,9 +129,9 @@
     <script>
         let bulletPosition = null;
         let currentChamber = 0;
-        const totalChambers = 6;
-        let triggerPullCount = 0; // Counter for trigger pulls
-        let successfulPulls = 0; // Counter for successful trigger pulls
+        const totalChambers = 10;
+        let triggerPullCount = 0;
+        let successfulPulls = 0;
         let chambers = [];
 
         function initializeChambers() {
@@ -134,7 +140,7 @@
             chambers[liveRoundIndex] = "live";
         }
 
-        initializeChambers(); // Initialize chambers when the game loads
+        initializeChambers();
 
         const body = document.body;
         const resultDiv = document.getElementById('result');
@@ -158,54 +164,53 @@
         }
 
         function spinChamber() {
-            initializeChambers(); // Re-initialize chambers
+            initializeChambers();
             currentChamber = 0;
-            triggerPullCount = 0; // Reset trigger pull count
-            successfulPulls = 0; // Reset successful pulls count
+            triggerPullCount = 0;
+            successfulPulls = 0;
             resultDiv.innerText = "Cylinder spun! Ready to fire.";
-            successfulPullsDiv.innerText = "Successful Trigger Pulls: 0"; // Update the new visualization
-            barrelDiv.style.display = "none"; // Hide the barrel on reset
-            body.style.backgroundColor = ""; // Reset background color
+            successfulPullsDiv.innerText = "Successful Trigger Pulls: 0";
+            barrelDiv.style.display = "none";
+            body.style.backgroundColor = "";
             restartButton.classList.add("hidden");
             playSound("cockingSound");
-            updateBarrelVisualization(); // Update barrel visualization
+            updateBarrelVisualization();
         }
 
         function pullTrigger() {
             if (chambers[currentChamber] === "live") {
                 resultDiv.innerText = "BANG! You lose.";
-                body.style.backgroundColor = "red"; // Game over visualization
+                body.style.backgroundColor = "red";
                 restartButton.classList.remove("hidden");
                 playSound("bangSound");
-                triggerPullCount = 0; // Reset trigger pull count
+                triggerPullCount = 0;
             } else {
                 resultDiv.innerText = "Click! You survived.";
-                successfulPulls++; // Increment successful pulls count
-                successfulPullsDiv.innerText = "Successful Trigger Pulls: " + successfulPulls; // Update the new visualization
+                successfulPulls++;
+                successfulPullsDiv.innerText = "Successful Trigger Pulls: " + successfulPulls;
                 playSound("gunSound");
-                currentChamber = (currentChamber + 1) % totalChambers; // Move clockwise
+                currentChamber = (currentChamber + 1) % totalChambers;
                 triggerPullCount++;
-                updateBarrelVisualization(); // Update barrel visualization
+                updateBarrelVisualization();
             }
         }
 
         function rollBarrelBack() {
-            currentChamber = (currentChamber - 1 + totalChambers) % totalChambers; // Move counterclockwise
+            currentChamber = (currentChamber - 1 + totalChambers) % totalChambers;
             resultDiv.innerText = "Barrel rolled back one position.";
-            updateBarrelVisualization(); // Update barrel visualization
+            updateBarrelVisualization();
         }
 
         function restartGame() {
-            spinChamber(); // Reuse spinChamber to reset the game state
+            spinChamber();
         }
 
         function playSound(soundId) {
             const sound = document.getElementById(soundId);
-            sound.currentTime = 0; // Reset sound
+            sound.currentTime = 0;
             sound.play();
         }
 
-        // Initial update to set up visualization and hide the barrel
         barrelDiv.style.display = "none";
         updateBarrelVisualization();
     </script>
